@@ -90,15 +90,7 @@ namespace AndreTurismoApp.AddressService.Controllers
           {
               return Problem("Entity set 'AndreTurismoAppAddressServiceContext.Address'  is null.");
           }
-
-
-            //Chamar o servico de consulta de endereco ViaCEP
-
             _context.Address.Add(address);
-
-            
-            
-
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetAddress", new { id = address.Id }, address);
