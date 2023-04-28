@@ -22,5 +22,13 @@ namespace AndreTurismoApp.Controllers
         {
             return await _addressService.GetAddress();
         }
+
+        [HttpPost]
+        public async Task<ActionResult<Address>> PostAddress(Address address)
+        {
+            
+            return null;
+        }
+
     }
 }
