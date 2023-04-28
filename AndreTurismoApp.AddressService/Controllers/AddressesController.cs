@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AndreTurismoApp.AddressService.Data;
 using AndreTurismoApp.Models;
+using AndreTurismoApp.Services;
 
 namespace AndreTurismoApp.AddressService.Controllers
 {
@@ -15,10 +16,12 @@ namespace AndreTurismoApp.AddressService.Controllers
     public class AddressesController : ControllerBase
     {
         private readonly AndreTurismoAppAddressServiceContext _context;
+        private readonly PostOfficesService _postOfficesService;
 
-        public AddressesController(AndreTurismoAppAddressServiceContext context)
+        public AddressesController(AndreTurismoAppAddressServiceContext context, PostOfficesService postOfficesService)
         {
             _context = context;
+            _postOfficesService = postOfficesService;
         }
 
         // GET: api/Addresses
@@ -29,7 +32,7 @@ namespace AndreTurismoApp.AddressService.Controllers
           {
               return NotFound();
           }
-            return await _context.Address.ToListAsync();
+            return await _context.Address.Include(a => a.City).ToListAsync();
         }
 
         // GET: api/Addresses/5
@@ -91,12 +94,13 @@ namespace AndreTurismoApp.AddressService.Controllers
               return Problem("Entity set 'AndreTurismoAppAddressServiceContext.Address'  is null.");
           }
             //Chamar o servico de consulta de endereco ViaCEP
-
-            _context.Address.Add(address);
+            AddressDTO addreesDto = _postOfficesService.GetAddress(address.CEP).Result;
+            var addressComplete = new Address(addreesDto);
+            _context.Address.Add(addressComplete);
 
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetAddress", new { id = address.Id }, address);
+            return addressComplete;
         }
 
         // DELETE: api/Addresses/5

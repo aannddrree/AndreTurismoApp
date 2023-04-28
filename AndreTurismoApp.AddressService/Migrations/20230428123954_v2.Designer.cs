@@ -3,6 +3,7 @@ using AndreTurismoApp.AddressService.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AndreTurismoApp.AddressService.Migrations
 {
     [DbContext(typeof(AndreTurismoAppAddressServiceContext))]
-    partial class AndreTurismoAppAddressServiceContextModelSnapshot : ModelSnapshot
+    [Migration("20230428123954_v2")]
+    partial class v2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
