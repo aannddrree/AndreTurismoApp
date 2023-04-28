@@ -40,7 +40,7 @@ namespace AndreTurismoApp.AddressService.Controllers
           {
               return NotFound();
           }
-            var address = await _context.Address.FindAsync(id);
+            var address = await _context.Address.Include(a => a.City).Where(a => a.Id == id).FirstOrDefaultAsync();
 
             if (address == null)
             {
@@ -53,7 +53,7 @@ namespace AndreTurismoApp.AddressService.Controllers
         // PUT: api/Addresses/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAddress(int id, Address address)
+        public async Task<ActionResult<Address>> PutAddress(int id, Address address)
         {
             if (id != address.Id)
             {
@@ -78,7 +78,7 @@ namespace AndreTurismoApp.AddressService.Controllers
                 }
             }
 
-            return NoContent();
+            return address;
         }
 
         // POST: api/Addresses
@@ -90,14 +90,9 @@ namespace AndreTurismoApp.AddressService.Controllers
           {
               return Problem("Entity set 'AndreTurismoAppAddressServiceContext.Address'  is null.");
           }
-
-
             //Chamar o servico de consulta de endereco ViaCEP
 
             _context.Address.Add(address);
-
-            
-            
 
             await _context.SaveChangesAsync();
 
@@ -106,7 +101,7 @@ namespace AndreTurismoApp.AddressService.Controllers
 
         // DELETE: api/Addresses/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAddress(int id)
+        public async Task<ActionResult<Address>> DeleteAddress(int id)
         {
             if (_context.Address == null)
             {
